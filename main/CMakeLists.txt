@@ -1,4 +1,6 @@
-idf_component_register(SRCS "blufi_example_main.c"
-                            "blufi_security.c"
-                            "blufi_init.c"
+idf_component_register(SRCS  "blufi_example_main.c" "app.c"
                     INCLUDE_DIRS ".")
+
+
+# idf_component_register(SRCS "main.cpp"
+#         INCLUDE_DIRS ".")
