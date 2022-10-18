@@ -1,7 +1,16 @@
 #pragma once
 
 #include "lvgl/lvgl.h"
+
+#include "esp_system.h"
+#include "esp_freertos_hooks.h"
+#include "esp_mac.h"
+#include "esp_wifi.h"
+#include "esp_event.h"
+#include "esp_log.h"
 #include "esp_err.h"
+#include "nvs_flash.h"
+
 
 #define BLUFI_EXAMPLE_TAG "BLUFI_EXAMPLE"
 #define BLUFI_INFO(fmt, ...)   ESP_LOGI(BLUFI_EXAMPLE_TAG, fmt, ##__VA_ARGS__)

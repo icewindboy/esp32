@@ -18,18 +18,10 @@
 #include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "freertos/event_groups.h"
-#include "esp_system.h"
-#include "esp_freertos_hooks.h"
-#include "esp_mac.h"
-#include "esp_wifi.h"
-#include "esp_event.h"
+#include "freertos/semphr.h"
 #include "esp_log.h"
-#include "esp_err.h"
-#include "nvs_flash.h"
 
 #include "lvgl.h"
-// #include "lv_conf_internal.h"
 #include "lvgl_helpers.h"
 
 #include "lvgl_touch_calibration/lv_tc.h"
@@ -40,6 +32,7 @@
 #include "demos/lv_demos.h"
 
 #include "app.h"
+#include "calibration.h"
 
 #define TAG "APP"
 #define LV_TICK_PERIOD_MS 1
@@ -49,13 +42,12 @@ static void create_demo(void);
 static void calibration_run(void);
 static void on_long_pressed(lv_event_t *event);
 static void on_pressed_released(lv_event_t *event);
+SemaphoreHandle_t xGuiSemaphore;
 
 void app_main(void)
 {
     xTaskCreatePinnedToCore(guiTask, "gui", 4096 * 2, NULL, 0, NULL, 1);
 }
-
-SemaphoreHandle_t xGuiSemaphore;
 
 static void onCalibrationAccept(lv_event_t *event)
 {
@@ -69,7 +61,7 @@ static void guiTask(void *pvParameter)
     xGuiSemaphore = xSemaphoreCreateMutex();
 
     app_init(disp_driver_flush, touch_driver_read);
-    
+
 #if CONFIG_LV_TOUCH_CONTROLLER != TOUCH_CONTROLLER_NONE
     if (!esp_nvs_tc_coeff_init())
     {
@@ -129,7 +121,7 @@ static lv_obj_t *example_msg_3(void)
     return panel;
 }
 
-static u16_t long_pressed = 0;
+static uint32_t long_pressed = 0;
 void on_long_pressed(lv_event_t *event)
 {
     long_pressed++;
@@ -149,14 +141,15 @@ void create_demo(void)
 {
     // lv_example_win_1();
     // lv_example_get_started_1();
-    lv_demo_music();
+    // lv_demo_music();
     // lv_demo_widgets();
     // lv_demo_keypad_encoder();
     // lv_demo_benchmark_set_max_speed(false);
     // lv_obj_t *panel = example_msg_3();
     // lv_obj_add_event_cb(panel, on_long_pressed, LV_EVENT_LONG_PRESSED_REPEAT, NULL);
     // lv_obj_add_event_cb(panel, on_pressed_released, LV_EVENT_RELEASED, NULL);
-    ESP_LOGI(TAG, "MSG1:CREATED_DEMO");
+    // ESP_LOGI(TAG, "MSG1:CREATED_DEMO");
+    calibration_show();
 }
 
 void calibration_run()

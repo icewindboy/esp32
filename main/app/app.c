@@ -50,7 +50,7 @@ void app_init(flush_cb driver_flush, readCb touch_read)
 
 void init_root()
 {
-  lv_obj_t *root = lv_obj_create(lv_scr_act());
+  root = lv_obj_create(lv_scr_act());
   lv_obj_set_size(root, LV_PCT(100), LV_PCT(100));
 
   manager = lv_fragment_manager_create(NULL);
