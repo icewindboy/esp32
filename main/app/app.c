@@ -50,11 +50,10 @@ void app_init(flush_cb driver_flush, readCb touch_read)
 
 void init_root()
 {
-  root = lv_obj_create(lv_scr_act());
-  lv_obj_set_size(root, LV_PCT(100), LV_PCT(100));
-
+  // root = lv_obj_create(NULL);
+  // lv_obj_set_size(root, LV_HOR_RES_MAX, LV_VER_RES_MAX);
+  // full_size(root);
   manager = lv_fragment_manager_create(NULL);
-  lv_obj_add_event_cb(root, manager_del_cb, LV_EVENT_DELETE, manager);
 }
 
 void manager_del_cb(lv_event_t *e)
@@ -113,11 +112,17 @@ void drawbuf_free()
 {
   free(draw_buf1);
   free(draw_buf2);
+  if (manager)
+    lv_fragment_manager_del(manager);
 }
-
 
 void lv_tick_task(void *arg)
 {
-    (void)arg;
-    lv_tick_inc(LV_TICK_PERIOD_MS);
+  (void)arg;
+  lv_tick_inc(LV_TICK_PERIOD_MS);
+}
+
+void full_size(lv_obj_t *obj)
+{
+  lv_obj_set_size(obj, LV_HOR_RES_MAX, LV_VER_RES_MAX);
 }

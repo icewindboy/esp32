@@ -33,6 +33,7 @@
 
 #include "app.h"
 #include "calibration.h"
+#include "weather.h"
 
 #define TAG "APP"
 #define LV_TICK_PERIOD_MS 1
@@ -49,26 +50,20 @@ void app_main(void)
     xTaskCreatePinnedToCore(guiTask, "gui", 4096 * 2, NULL, 0, NULL, 1);
 }
 
-static void onCalibrationAccept(lv_event_t *event)
-{
-    ESP_LOGI(TAG, "Accept clicked");
-    create_demo();
-}
-
 static void guiTask(void *pvParameter)
 {
     (void)pvParameter;
     xGuiSemaphore = xSemaphoreCreateMutex();
 
     app_init(disp_driver_flush, touch_driver_read);
-
-#if CONFIG_LV_TOUCH_CONTROLLER != TOUCH_CONTROLLER_NONE
     if (!esp_nvs_tc_coeff_init())
     {
-        calibration_run();
+        calibration_show();
     }
-#endif
-    create_demo();
+    else
+    {
+        weather_show();
+    }
 
     while (1)
     {
@@ -86,39 +81,6 @@ static void guiTask(void *pvParameter)
     /* A task should NEVER return */
     drawbuf_free();
     vTaskDelete(NULL);
-}
-
-static lv_obj_t *example_msg_3(void)
-{
-    lv_obj_t *panel = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(panel, LV_HOR_RES_MAX, LV_VER_RES);
-    lv_obj_center(panel);
-    lv_obj_set_flex_flow(panel, LV_FLEX_FLOW_ROW);
-    lv_obj_set_flex_align(panel, LV_FLEX_ALIGN_SPACE_BETWEEN, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START);
-
-    lv_obj_t *btn;
-    lv_obj_t *label;
-
-    /*Current value*/
-    label = lv_label_create(panel);
-    lv_obj_set_flex_grow(label, 2);
-    lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
-    lv_label_set_text(label, "?");
-
-    /*Down button*/
-    btn = lv_btn_create(panel);
-    lv_obj_set_flex_grow(btn, 1);
-
-    label = lv_label_create(btn);
-    lv_label_set_text(label, LV_SYMBOL_RIGHT);
-    lv_obj_center(label);
-
-    /*Slider*/
-    lv_obj_t *slider = lv_slider_create(panel);
-    lv_obj_set_flex_grow(slider, 1);
-    lv_obj_add_flag(slider, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
-
-    return panel;
 }
 
 static uint32_t long_pressed = 0;
@@ -142,7 +104,7 @@ void create_demo(void)
     // lv_example_win_1();
     // lv_example_get_started_1();
     // lv_demo_music();
-    // lv_demo_widgets();
+    lv_demo_widgets();
     // lv_demo_keypad_encoder();
     // lv_demo_benchmark_set_max_speed(false);
     // lv_obj_t *panel = example_msg_3();
@@ -150,14 +112,4 @@ void create_demo(void)
     // lv_obj_add_event_cb(panel, on_pressed_released, LV_EVENT_RELEASED, NULL);
     // ESP_LOGI(TAG, "MSG1:CREATED_DEMO");
     calibration_show();
-}
-
-void calibration_run()
-{
-    lv_obj_t *tCScreen = lv_tc_screen_create();
-    lv_obj_add_event_cb(tCScreen, onCalibrationAccept, LV_EVENT_READY, NULL);
-
-    lv_disp_load_scr(tCScreen);
-
-    lv_tc_screen_start(tCScreen);
 }

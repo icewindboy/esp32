@@ -1,7 +1,8 @@
 set(SOURCES 
-  "blufi_example_main.c"
+  "main.c"
   "app/app.c"
   "pages/calibration.c"
+  "pages/weather.c"
   "blufi/blufi_init.c"
   "blufi/blufi_security.c"
   "blufi/blufi_server.c"

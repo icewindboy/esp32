@@ -1,5 +1,12 @@
+#pragma once
+
 #include "lvgl.h"
+#include "esp_log.h"
 #include "app.h"
+
+#include "lv_tc_screen.h"
+
+#define TAG "Calibration"
 
 struct calibration_page
 {
@@ -13,13 +20,22 @@ static void init_page(lv_fragment_t *self, void *args)
   ((struct calibration_page *)self)->name = args;
 }
 
+static void on_accept(lv_event_t *event)
+{
+  ESP_LOGI(TAG, "Accept clicked");
+  // create_demo();
+}
+
 static lv_obj_t *create_page(lv_fragment_t *self, lv_obj_t *parent)
 {
-  lv_obj_t *label = lv_label_create(parent);
-  lv_obj_set_style_bg_opa(label, LV_OPA_COVER, 0);
+  lv_obj_t *tCScreen = lv_tc_screen_create();
+  // full_size(tCScreen);
 
-  lv_label_set_text_fmt(label, "Hello, %s!", ((struct calibration_page *)self)->name);
-  return label;
+  lv_obj_add_event_cb(tCScreen, on_accept, LV_EVENT_READY, NULL);
+  lv_disp_load_scr(tCScreen);
+  lv_tc_screen_start(tCScreen);
+
+  return tCScreen;
 }
 
 static const lv_fragment_class_t calibration_cls = {
