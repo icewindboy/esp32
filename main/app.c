@@ -71,7 +71,6 @@ void init_display(flush_cb disp_driver_flush)
   draw_buf2 = heap_caps_malloc(DISP_BUF_SIZE * sizeof(lv_color_t), MALLOC_CAP_DMA);
   assert(draw_buf2 != NULL);
 
-
   uint32_t size_in_px = DISP_BUF_SIZE;
 
   lv_disp_draw_buf_init(&disp_buf, draw_buf1, draw_buf2, size_in_px);

@@ -52,7 +52,6 @@ static void on_pressed_released(lv_event_t *event);
 
 void app_main(void)
 {
-    esp_err_t ret;
     xTaskCreatePinnedToCore(guiTask, "gui", 4096 * 2, NULL, 0, NULL, 1);
 }
 
