@@ -25,7 +25,9 @@
     "task.h": "c",
     "esp_nvs_tc.h": "c",
     "*.inc": "c",
-    "app.h": "c"
+    "app.h": "c",
+    "lv_tc_screen.h": "c",
+    "sndbx_pges.h": "c"
   },
   "idf.adapterTargetName": "esp32",
   "idf.port": "/dev/ttyUSB0",

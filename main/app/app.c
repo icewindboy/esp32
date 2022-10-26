@@ -24,7 +24,7 @@ static void init_display(flush_cb disp_driver_flush);
 static void init_indev(readCb touch_read);
 static void init_periodic_timer();
 static void init_root();
-static void manager_del_cb(lv_event_t *e);
+
 void lv_tick_task(void *arg);
 
 void app_init(flush_cb driver_flush, readCb touch_read)
@@ -50,9 +50,6 @@ void app_init(flush_cb driver_flush, readCb touch_read)
 
 void init_root()
 {
-  // root = lv_obj_create(NULL);
-  // lv_obj_set_size(root, LV_HOR_RES_MAX, LV_VER_RES_MAX);
-  // full_size(root);
   manager = lv_fragment_manager_create(NULL);
 }
 
@@ -125,4 +122,12 @@ void lv_tick_task(void *arg)
 void full_size(lv_obj_t *obj)
 {
   lv_obj_set_size(obj, LV_HOR_RES_MAX, LV_VER_RES_MAX);
+}
+
+lv_obj_t *get_screen()
+{
+  lv_obj_t *scr = lv_scr_act();
+  // lv_obj_set_size(scr, LV_HOR_RES, LV_VER_RES);
+
+  return scr;
 }

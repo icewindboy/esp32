@@ -30,10 +30,14 @@
 
 #include "examples/lv_examples.h"
 #include "demos/lv_demos.h"
+#include "sndbx/pages/sndbx_pges.h"
 
-#include "app.h"
-#include "calibration.h"
-#include "weather.h"
+#include "app/app.h"
+#include "pages/calibration.h"
+#include "pages/weather.h"
+#include "pages/gadget/ui.h"
+#include "blufi/blufi.h"
+#include "mqtt/mqtt.h"
 
 #define TAG "APP"
 #define LV_TICK_PERIOD_MS 1
@@ -58,11 +62,18 @@ static void guiTask(void *pvParameter)
     app_init(disp_driver_flush, touch_driver_read);
     if (!esp_nvs_tc_coeff_init())
     {
-        calibration_show();
+        // start_blufi();
+        // mqtt_start();
+        // ui_init();
     }
     else
     {
-        weather_show();
+        // weather_show();
+        // calibration_show();
+        start_blufi();
+        mqtt_start();
+        ui_init();
+        // sndbx_pge_lv_examples_test();
     }
 
     while (1)
@@ -111,5 +122,5 @@ void create_demo(void)
     // lv_obj_add_event_cb(panel, on_long_pressed, LV_EVENT_LONG_PRESSED_REPEAT, NULL);
     // lv_obj_add_event_cb(panel, on_pressed_released, LV_EVENT_RELEASED, NULL);
     // ESP_LOGI(TAG, "MSG1:CREATED_DEMO");
-    calibration_show();
+    // calibration_show();
 }

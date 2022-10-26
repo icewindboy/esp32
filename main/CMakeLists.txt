@@ -1,19 +1,22 @@
-set(SOURCES 
-  "main.c"
-  "app/app.c"
-  "pages/calibration.c"
-  "pages/weather.c"
-  "blufi/blufi_init.c"
-  "blufi/blufi_security.c"
-  "blufi/blufi_server.c"
-
+file(GLOB SOURCES 
+  main.c
+  app/*.c
+  blufi/*.c
+  pages/*.c
+  pages/temperature/*.c
+  pages/gadget/*.c
+  mqtt/*.c
+  box/*.c
   )
 
-set(include_dirs 
-  app
-  pages
-  blufi  
-)
+# set(include_dirs 
+#   app
+#   pages
+#   pages/temperature
+#   pages/gadget
+#   blufi  
+#   driver
+# )
 
 idf_component_register(SRCS  
           ${SOURCES} 

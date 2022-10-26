@@ -1,8 +1,6 @@
-#pragma once
-
 #include "lvgl.h"
 #include "esp_log.h"
-#include "app.h"
+#include "../app/app.h"
 
 #include "lv_tc_screen.h"
 
@@ -24,6 +22,8 @@ static void on_accept(lv_event_t *event)
 {
   ESP_LOGI(TAG, "Accept clicked");
   // create_demo();
+  lv_fragment_manager_pop(manager);
+  
 }
 
 static lv_obj_t *create_page(lv_fragment_t *self, lv_obj_t *parent)

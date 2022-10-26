@@ -11,4 +11,5 @@ lv_obj_t *root ;
 void app_init(flush_cb disp_driver_flush, readCb touch_read);
 void drawbuf_free();
 void full_size(lv_obj_t *obj);
-void manager_del_cb(lv_event_t *e)
+void manager_del_cb(lv_event_t *e);
+lv_obj_t *get_screen(void);
